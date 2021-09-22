@@ -1,0 +1,86 @@
+Project 1
+by 20200029 공현덕
+ This project is based on Kaist EE205 lecture 1, which is about two multiplication
+algorithm, "Grade-School algorithm" and "Karatsuba algorithm". By doing this project,
+I can understand much more about efficiency of "Divide and Conquer" strategies.
+From now on, I would explain more detail about (1)how I deal with n (the number of
+digits) that's not a power of 2, (2)how I handle carries, and (3)what each function
+does.
+ (1) When I emplement Karatsuba with general length of n, instead of calculate n/2,
+I treat half length 'half' as a quotient of (n+1)/2, so that I could divide A[n-1:0]
+={A[n-1:half],A[half-1:0]}. This is because, in case of n=1, for example A = 7, I want
+to divide it like A = 0*10^1 + 7 = a*10^1 + b, so that b does not become zero.
+ (2) To emplement operation like add, subtraction, multiplication,...etc., I handle
+carries by following ways:
+	Goal: target array C stores all carries and calculated include itself
+	1. Add, C = A + B
+	To get ith element, consider if A[i]+B[i]+C[i] >= 10.
+	If it is true, C[i+1] is added by quotient of (A[i]+B[i]+C[i])/10
+	and C[i] is added by remainder of (A[i]+B[i]+C[i])/10. Else, just
+	calculate C[i] in the same way but do not do anything on C[i+1].
+
+	2. Substraction, C = A - B
+	I handle subtraction only when A is greater than B.
+	Then I can handle carry in this way.
+	To get ith element, consider if A[i]+C[i] < B[i].
+	If it is true, do C[i+1] = C[i+1] - 1 and C[i] = C[i]+10 first,
+	and then do C[i] = A[i] + C[i] - B[i]. Else, just do second one.
+
+	3. Multiplication, C = A + B
+	In Grade-School algorithm I add array named "middle" which is for
+	storing A * B[j]. And then, I add middle to C repeatedly.
+	To get (i+j)th element of middle, it needs to integer mul&carry which
+	are store each of remainder&quotient of (A[i]*B[j]+middle[i+j]).
+	For every time when i or j changes, middle must be initilaized into zero.
+ (3) I define many functions for Project 1. Here is the detail of each:
+
+	GetNumStr: Gets number in string type. I use fgets to read strings
+	from standard input and strlen to compute length of the input number.
+	If the number is bigger than Maxlen(=1024), it would print error message
+	and exit the program.
+
+	StrToNum: Convert string into integer array. This function stores
+	each elements in inverse order of input string to make that a lower digit
+	is stored in lower element of integer array.
+
+	GetNumLen: Get length of integer array. It scans array from top to bottom
+	and returns first index that corresponding element is not zero.
+
+	PrintNum: Print integer array with its name. I prints array inversly
+	so that the number can be printed from head to tail.
+
+	PrimitiveAdd: Do C = A + B. Target array C can be uninitialized.
+	When the target is uninitialized, it computes C = C + A + B. Else,
+	it just computes C = A + B. A and B must be different from C.
+	The detail of algorithm is already explained in (2).
+
+	PrimitiveSub: Do C = A - B only when A > B. Target array C must be
+	initialized as zero. The detail of algorithm is already explained in (2).
+
+	ClearNum: Initialize all the elements of the array as zero.
+	Assign 0 to each elements until parameter of loop becomes length of number.
+
+	CopyNum: Copy source into destination array. Assign source elements
+	to corresponding destination elements.
+
+	GradeSchool: Compute multiplication in the way of Grade-School algorithm.
+	I declared empty array, temp, since the PrimitiveAdd does not allow using 
+	destination as an input. The more detail is explained in the comment of the
+	source code.
+
+	Karatsuba: Compute multiplication in the way of Karatsuba algorithm.
+	Need two operand arraies A,B and bigger length of operand as inputs,
+	and a target array C as an output.
+	The overall algorithm is not quite different from lecture note. But
+	very large memory is required to store intermediate results if it does
+	not save the number of temporal arrays. And if it is stack array, this
+	makes program much more slower because every time the function is
+	recursively called, huge amount of memory of temporal array is allocated
+	on the stack. To prevent the program become slower, I used dynamic allocation
+	to the five temporal arrays(three of them are vital for storing ac,bd,
+	(a+b)(c+d) and two for extra), and store all intermediate results by clearing
+	two extra arrays. Also I can skip the process of multiplying 10^k by adding
+	constant to the address of C. The more detail process is in the comment of
+	the source code.
+
+ Thank you.

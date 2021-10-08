@@ -1,0 +1,22 @@
+/* EE205 Project2: QuickSort & ChoosePivot */
+/* Written by 20200029 HyunDeok Kong */
+#include <stdio.h>
+
+// Test QuickSort in the main
+int main(){
+  // storing array
+  int a[8] = {8,3,2,5,1,4,7,6};
+  // comparison counter
+  int count = 0;
+  
+  // print sorted array
+  for(int i=0; i<8; i++) {
+    printf("%d",a[i]);
+  }
+  printf("\n");
+
+  // print result
+  printf("First: %d",count);
+  
+  return 0
+}

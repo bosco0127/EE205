@@ -1,7 +1,6 @@
-quickA: quickA.o
+quickA quickB: quickA.o quickB.o
 	gcc quickA.o -o quickA
-quickB: quickB.o
-	gcc quickA.o -o quickB
+	gcc quickB.o -o quickB
 quickA.o: quickA.c
 
 quickB.o: quickB.c

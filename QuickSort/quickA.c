@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <time.h>
+#include <string.h>
 
 #define Max 10000000 // maximum length
 
@@ -107,7 +108,7 @@ void ChoosePivot(int *v, int begin, int end, int type){
 // Gets array v, begin/end location, and type (1,2,3,4)
 // Returns how many comparisions is made
 // Assume begin elements is pivot
-int QuickSort(int* v, int begin, int end, int type){
+long QuickSort(int* v, int begin, int end, int type){
   // breakout condition
   if (begin >= end) return 0;
   
@@ -142,42 +143,55 @@ int QuickSort(int* v, int begin, int end, int type){
 int main(){
   // storing array
   int *a = (int*) malloc(Max*sizeof(int));
+  // copy array
+  int *copy[13]; // 0: First, 1: Last, 2~11: Random, 12: Median of three
   // backup pointer
   int *backup;
   // store array length
   int len = 0;
   // comparison counter
-  int count = 0;
+  long count = 0;
 
   // get array
   len = GetNum(a);
 
-  // realloc a
-  // backup
-  backup = a;
-  // reduce memory
-  a = (int *) realloc(a, len*sizeof(int));
-  if(a == NULL){ // if failed
-    free(backup); // free old a
-    assert(0); // assert
+  // copy array
+  for(int i=0; i<13; i++){
+    copy[i] = (int*) malloc(len*sizeof(int));
+    memcpy(copy[i],a,len*sizeof(int));
   }
 
-  // sort array
-  count = QuickSort(a,0,len-1,3);
-  
-  // for debug
-  // print sorted array
-  for(int i=0; i<len; i++) {
-    printf("%d ",a[i]);
-  }
-  printf("\n");
-  // for debug
-
+  // **sort array**
+  // 1. First
+  count = QuickSort(copy[0],0,len-1,1);
   // print result
-  printf("First: %d\n",count);
+  printf("First: %ld\n",count);
+
+  // 2. Last
+  count = QuickSort(copy[1],0,len-1,2);
+  // print result
+  printf("Last: %ld\n",count);
+
+  // 3. Random
+  // initialize count
+  count = 0;
+  // repeat sort 10 times
+  for(int i=2; i<12; i++) {
+    count += QuickSort(copy[i],0,len-1,3);
+  }
+  // print result
+  printf("Random: %.1lf\n",count/10.0);
+
+  // 4. Median-of-three
+  count = QuickSort(copy[12],0,len-1,4);
+  // print result
+  printf("Median-of-three: %ld\n",count);
 
   // free all memory
   free(a);
+  for(int i=0; i<13; i++){
+    free(copy[i]);
+  }
   
   return 0;
 }

@@ -6,4 +6,4 @@ quickA.o: quickA.c
 quickB.o: quickB.c
 
 clean:
-	rm -f *.o quickA quickB
+	rm -f *.o quickA quickB out1 out2

@@ -270,18 +270,9 @@ int main(int argc, char* argv[]){
     memcpy(copy[i],a,len*sizeof(int));
   }
 
-  // for debug
-  for(int i=0; i< argc;i++){
-    fprintf(stderr,"argv[%d]: \"%s\"\n",i,argv[i]);
-  }
-  // for debug
-
   // **sort array**
   // 1. mine
   if(strcmp(argv[1],"mine") == 0) {
-    // for debug
-    fprintf(stderr,"running mine\n");
-    // for debug
     gettimeofday(&startTime, NULL); // begin
     QuickSort(copy[0],0,len-1);
     gettimeofday(&endTime, NULL); // end
@@ -295,9 +286,6 @@ int main(int argc, char* argv[]){
   }
   // 2. crt
   else if(strcmp(argv[1],"crt") == 0){
-    // for debug
-    fprintf(stderr,"running crt\n");
-    // for debug
     gettimeofday(&startTime, NULL); // begin
     qsort(copy[1],len,sizeof(int),compare);
     gettimeofday(&endTime, NULL); // end
@@ -311,9 +299,6 @@ int main(int argc, char* argv[]){
   }
   // 3. else, run with mine
   else {
-    // for debug
-    fprintf(stderr,"running else\n");
-    // for debug
     gettimeofday(&startTime, NULL); // begin
     QuickSort(copy[0],0,len-1);
     gettimeofday(&endTime, NULL); // end

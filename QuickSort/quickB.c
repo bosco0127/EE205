@@ -99,6 +99,106 @@ int RSelect(int* v, int begin, int end, int k){
 
 }
 
+/*
+// Merge Sort for 5 elements
+void Merge(int *v, int begin, int end){
+  // breakout condition
+  if(begin >= end) return;
+
+  // Partition
+  int mid = (begin+end)/2;
+  int *a=(int*)malloc((mid-begin+1)*sizeof(int));
+  int *b=(int*)malloc((end-mid)*sizeof(int));
+  int i=0; // a index
+  int j=0; // b index
+  // copy
+  memcpy(a,v,(mid-begin+1)*sizeof(int));
+  for(int k=0;i<(end-mid);i++){
+    b[k]=v[mid+k];
+  }
+  // recursive sort
+  Merge(a,0,mid-begin);
+  Merge(b,0,end-mid-1);
+  
+  // Merge partion
+  for(int k=begin; k<=end; k++){
+    if(i==(mid-begin)){
+      v[k] = b[j++];
+    }
+    else if(j==(end-mid-1)){
+      v[k] = a[i++];
+    }
+    else {
+      if(a[i]<b[j]){
+	v[k] = a[i++];
+      }
+      else
+	v[k] = b[j++];
+    }
+  }
+
+  // free a,b
+  free(a);
+  free(b);
+
+  return;
+}
+
+// DSelect function
+// Gets array v, length, statistic k.
+int DSelect(int *v, int begin, int end, int k){
+  // breakout condition
+  if (begin >= end) return begin;
+
+  // parameter
+  int five = (end-begin)/5;
+  int *C = (int *)malloc((five+1)*sizeof(int));
+  int i=begin+1;
+  int j=0;
+  int p; // pivot index
+  
+  // sort each group
+  for(int n=0;n<five;n++){
+    Merge(v,begin+5*n,begin+5*n+4);
+  }
+  Merge(v,begin+5*five,end);
+
+  // store median to C
+  for(int n=0;n<five;n++){
+    C[n]=v[begin+5*n+2];
+  }
+  C[five]=v[end];
+
+  // reculsively select p
+  p = DSelect(C,0,five,five/2);
+  // free C
+  free(C);
+
+  // Partition v around p
+  swap(v,begin,p);
+  // make partition
+  for (j = begin + 1; j <= end; j++){
+    if(v[j] < v[begin]) {
+      if(i == j) {
+	i++; // if i, j point same elements, no need to swap
+      }
+      else {
+	swap(v,i,j);
+	i++;
+      }
+    }
+  }
+  // determine pivot location
+  swap(v,begin,i-1); // (i-1) is a new index of pivot
+
+  // return
+  if((i-1) == k) return (i-1); // return itself
+  else if((i-1) > k) return DSelect(v, begin, i-2, k); // k is in 1st partition
+  else return DSelect(v, i, end, k-i); // k is in 2nd partition of k-(i-1)-1
+}
+*/
+
+
 // Quicksort function
 // Gets array v, begin/end location
 void QuickSort(int* v, int begin, int end){
@@ -115,14 +215,6 @@ void QuickSort(int* v, int begin, int end){
   QuickSort(v,begin,p-1);
   QuickSort(v,p+1,end);
 }
-
-/*
-// DSelect function
-// Gets array v, length, statistic k.
-int DSelect(int *v, int len, int k){
-
-}
-*/
 
 // Print array function
 // Gets array v, and array length len

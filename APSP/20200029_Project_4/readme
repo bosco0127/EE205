@@ -1,0 +1,47 @@
+Project 4: Finding shortest path with Bellman-Ford & Floyd-Warshall algorithm.
+by 20200029 공현덕
+
+(1) Data structure & algorithm
+1) Data structure
+ I create Edge structure that contains the source & destination vertex and the edge weight,
+also create Graph structure that contains no. of the vertex & edge and the list of the edges.
+ In Bellman-Ford algorithm, I optimized the space by using 1-D array A & B to calculate shortest
+path length & the predecessor pointers. By using 1-D array instead of 2-D array, the part "A[i,v]
+= min(A[i-1,v],A[i-1,w]+lwv)" changes into "A[v] = min(A[v],A[w]+lwv)"(Actually the part in the
+source code was written by if-else, and the indices are slightly different, but the meaning does
+not change. If the vertex number is v, the corresponding index is v-1).
+Similar to this, I used 2-D array A & B for the Floyd-Warshall instead of 3-D array.
+2) Algorithm
+ The overall algorithm of the bf & fw are based on the lecture. So, I am going to explain about
+PrintPath only, which represent the shortest path by using array B.
+ In Bellman-Ford algorithm, B is initialized by zero(means NULL). While the "A[v] = min(A[v],A[w]+lwv)"
+part is running, B[v] is set to w if A[w]+lwv is selected. This means that B[v] is pointing the
+predecessor vertex. Therefore, the algorithm of PrintPath is simple in this case: recursively find
+the path from the destination to the source vertex.
+ In Floyd-Warshall algorithm, B[i][j] is initialized by i (if i=j), j (if (i,j) is in the E) zero
+(if (i,j) is not in the E). While the "A[i,j] = min(A[i,j],A[i,k]+A[k,j])" part is running, B[i,j]
+is set to k if A[i,k]+A[k,j] is selected. Since B[i,j] is initialized by j, it means that B[i,j]
+stores the destination. Therefore, if i and j are directly connected by an edge, PrintPath will
+print the destination and returns. So, PrintPath in fw finds the shortest path by recursively calls
+itself like this: if B[i,j] = k, call PrintPath(i,k) and PrintPath(k,j). Then, the result of the
+PrintPath(i,j) prints right before the i. So, I need to add i separately.
+(2) Performance for APSP
+ I test the perfomances of bf and fw for APSP by input_4.txt which is given. Each result tested in
+eelab6 is here:
+1) bf
+20200029@eelab6:~/HW4$ time ./bf < input_4.txt > /dev/null
+
+real    0m3.991s
+user    0m3.828s
+sys     0m0.004s
+2) fw
+20200029@eelab6:~/HW4$ time ./fw < input_4.txt > /dev/null
+
+real    0m6.539s
+user    0m6.296s
+sys     0m0.004s
+
+Both of them finished within 10 seconds, which satisfy the baseline.
+
+In Closing, I sincerely thanks to the Professor and all the TAs for the whole semester.
+Thank you.

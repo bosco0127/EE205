@@ -1,0 +1,59 @@
+20200029 공현덕- Project 3
+(1) I choose Hash Table data structure in order to implement the Project 3.
+The source code of the hash table is basically based on the EE209 assignment no.3
+which was written by myself. It uses link lists, and hash table expansion.
+It would expand the size of the array 2 times larger when the number of the items
+attain the 75 percent of the current array size. Also, I changed the form of
+hash table element. Each element stores the word itself, and the integer type
+'count' which stores how many time it was counted.
+ I separate the whole process into four steps:
+
+1. Register words to hash table.
+ By using the algorithm of the given token.c, I could register the separated word
+into the hash table by replacing printf part with the RegisterWord function, which
+contains hash table expansion part.
+If the word is first registerd in the hash table, I allocate the memory for the word
+and set its count value to 1. If the word is already registered in the hash table,
+I increase its count value by 1.
+
+2. Align all the elements of the hash table to the word_array.
+ After RegisterWord is finished, I connect all the elements to the word_array(struct
+Word **) which size is the number of items by using ConnectWord function.
+
+3. QuickSort the word_array.
+ After connect all the elements to the word_array. I sort the elements in the inverse
+order of count first, and if the count is same, sort the elements in the inverse
+order of dictionay by using QuickSort algorithm. ChoosePivot algorithm is Median-of
+-three which was handled in the Project 2, and I made the Dictionary function to
+compare dictionary order of two words. The StrLwr function is used for subroutine
+of the Dictionary function. Actually we don't need to sort elements in the inverse
+order of dictionary but, since I want to check the correctness of my program by comparing
+mine with the result of "./token < file | sort | uniq -c | sort -k 1 -n -r" command,
+I add these functions.
+ 
+4. Print the array.
+ The last process is print the first n elements to the standard output.
+In the case that when the given n is bigger than the entire number of the
+elements, there can be a problem that accessing wrong memory address. To prevent
+this problem, I choose min(n,numItems) instead of n.
+
+ I choose the link list hash table because there can be the words that have same hash
+value and they might cause false positive. To prevent this case, I choose hash table that
+uses link list. By using this, I count all the different words correctly without both
+overlap and omission.
+
+(2) To check the correctness of my program, I print all the elements by typing in
+larger number than the number of elements and store it to out1, and store the result
+of "./token < file1 | sort | uniq -c | sort -k 1 -n -r" to out2 and compare these two files
+by "diff -c out1 out2".
+Following is the actual commands that I used for test.
+"./count 20000 < Crime-and-Punishment.txt  > out1,
+./token < Crime-and-Punishment.txt | sort | uniq -c | sort -k 1 -n -r > out2,
+diff -c out1 out2"
+"./count 20000 < iliad.txt  > out1,
+./token < iliad.txt | sort | uniq -c | sort -k 1 -n -r > out2,
+diff -c out1 out2"
+
+(3) For Crime-and-Punishment.txt, it took about 33.867 milliseconds,
+and for iliad.txt, it took about 44.408 milliseconds.
+The program has taken less than 30 msec when I have ignored the order of dictionary.
